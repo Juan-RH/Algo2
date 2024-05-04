@@ -1,33 +1,51 @@
 package aed;
 
 public class Fecha {
+    
+    private int dia;
+    private int mes;
+        
     public Fecha(int dia, int mes) {
-        throw new UnsupportedOperationException("No implementada aun");
+        this.dia = dia;
+        this.mes = mes;
     }
 
     public Fecha(Fecha fecha) {
-        throw new UnsupportedOperationException("No implementada aun");
+        this.dia = fecha.dia;
+        this.mes = fecha.mes;
     }
 
     public Integer dia() {
-        throw new UnsupportedOperationException("No implementada aun");
+        return dia;
     }
 
     public Integer mes() {
-        throw new UnsupportedOperationException("No implementada aun");
+        return mes;
     }
 
     public String toString() {
-        throw new UnsupportedOperationException("No implementada aun");
+        return dia + "/" + mes;
     }
 
     @Override
     public boolean equals(Object otra) {
-        throw new UnsupportedOperationException("No implementada aun");
+        if (this == otra){
+            return true;
+        }else if(getClass() != otra.getClass()){
+            return false;
+        }
+        Fecha otraFecha = (Fecha) otra;
+        return this.dia == otraFecha.dia && this.mes == otraFecha.mes;
+
     }
 
     public void incrementarDia() {
-        throw new UnsupportedOperationException("No implementada aun");
+        if (dia < diasEnMes(mes)){
+            dia += 1;
+        }else if(dia == diasEnMes(mes)){
+            dia = 1;
+            mes += 1;
+        }
     }
 
     private int diasEnMes(int mes) {
