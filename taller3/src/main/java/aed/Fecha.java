@@ -44,7 +44,11 @@ public class Fecha {
             dia += 1;
         }else if(dia == diasEnMes(mes)){
             dia = 1;
-            mes += 1;
+            if(mes == 12){
+                mes = 1;
+            }else{
+                mes += 1;
+            }
         }
     }
 
