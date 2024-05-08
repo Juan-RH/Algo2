@@ -1,13 +1,18 @@
 package aed;
 
+import javax.sound.midi.Sequence;
+
 class ArregloRedimensionableDeRecordatorios implements SecuenciaDeRecordatorios {
+    
+    private ArregloRedimensionableDeRecordatorios original;
 
     public ArregloRedimensionableDeRecordatorios() {
-        throw new UnsupportedOperationException("No implementada aun");
+        this.original = new ArregloRedimensionableDeRecordatorios();
     }
 
     public ArregloRedimensionableDeRecordatorios(ArregloRedimensionableDeRecordatorios vector) {
         throw new UnsupportedOperationException("No implementada aun");
+
     }
 
     public int longitud() {
@@ -32,7 +37,8 @@ class ArregloRedimensionableDeRecordatorios implements SecuenciaDeRecordatorios 
     }
 
     public ArregloRedimensionableDeRecordatorios copiar() {
-        throw new UnsupportedOperationException("No implementada aun");
+        return new ArregloRedimensionableDeRecordatorios(this.original);
+
     }
 
 }

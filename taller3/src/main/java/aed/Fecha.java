@@ -13,11 +13,12 @@ public class Fecha {
     public Fecha(Fecha fecha) {
         this.dia = fecha.dia;
         this.mes = fecha.mes;
+
     }
 
     public Integer dia() {
         return dia;
-    }
+    }   
 
     public Integer mes() {
         return mes;

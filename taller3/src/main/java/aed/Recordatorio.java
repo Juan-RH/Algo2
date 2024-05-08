@@ -5,14 +5,12 @@ public class Recordatorio {
     private String mensaje;
     private Fecha fecha;
     private Horario horario;
-    private Fecha fecha_original;
     
 
     public Recordatorio(String mensaje, Fecha fecha, Horario horario) {
         this.mensaje = mensaje;
-        this.fecha   = fecha;
-        this.horario = horario;
-        this.fecha_original = new Fecha(fecha);
+        this.fecha   = new Fecha(fecha);
+        this.horario = new Horario(horario);
         
     }
 
@@ -21,7 +19,7 @@ public class Recordatorio {
     }
 
     public Fecha fecha() {
-        return this.fecha_original;
+        return new Fecha(this.fecha);
     }
 
     public String mensaje() {
@@ -30,7 +28,7 @@ public class Recordatorio {
 
     @Override
     public String toString() {
-        return mensaje + " @ " + fecha + " " + horario;
+        return this.mensaje + " @ " + this.fecha + " " + this.horario;
     }
 
     @Override

@@ -1,3 +1,4 @@
 {
-    "CodeGPT.apiKey": "Huggingface"
+    "CodeGPT.apiKey": "Huggingface",
+    "java.debug.settings.onBuildFailureProceed": true
 }
