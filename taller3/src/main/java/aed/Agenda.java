@@ -1,29 +1,48 @@
 package aed;
 
+import javafx.beans.binding.StringBinding;
+
 public class Agenda {
 
+    private Fecha fechaActual;
+    private ArregloRedimensionableDeRecordatorios recordatorios;
+
+
     public Agenda(Fecha fechaActual) {
-        throw new UnsupportedOperationException("No implementada aun");
+        this.fechaActual = new Fecha(fechaActual);
+        this.recordatorios = new ArregloRedimensionableDeRecordatorios();
     }
 
     public void agregarRecordatorio(Recordatorio recordatorio) {
-        throw new UnsupportedOperationException("No implementada aun");
-
+        this.recordatorios.agregarAtras(recordatorio);
     }
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("No implementada aun");
+        StringBuffer recordatorioDeLaFecha = new StringBuffer();
+
+        recordatorioDeLaFecha.append(this.fechaActual + "\n=====\n");
+
+        Recordatorio recordatorio;
+        for (int i = 0; i < this.recordatorios.longitud(); i++) {
+            recordatorio = this.recordatorios.obtener(i);
+
+            if(recordatorio.fecha().mes() == this.fechaActual.mes()
+                && recordatorio.fecha().dia() == this.fechaActual.dia()){
+                    recordatorioDeLaFecha.append(recordatorio + "\n" );
+            }
+        }
+        return recordatorioDeLaFecha.toString();
 
     }
 
     public void incrementarDia() {
-        throw new UnsupportedOperationException("No implementada aun");
+        this.fechaActual.incrementarDia();
 
     }
 
     public Fecha fechaActual() {
-        throw new UnsupportedOperationException("No implementada aun");
+        return this.fechaActual;
     }
 
 }

@@ -1,5 +1,7 @@
 package aed;
 
+import java.lang.reflect.Array;
+
 interface SecuenciaDeRecordatorios {
 
     /**
@@ -7,7 +9,6 @@ interface SecuenciaDeRecordatorios {
      * 
      */
     public int longitud();
-
     /**
      * Agrega un elemento al final de la secuencia.
      * 
