@@ -1,6 +1,5 @@
 package aed;
 
-import javax.sound.midi.Sequence;
 
 class ArregloRedimensionableDeRecordatorios implements SecuenciaDeRecordatorios {
     

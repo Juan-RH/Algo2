@@ -1,7 +1,5 @@
 package aed;
 
-import java.lang.reflect.Array;
-
 interface SecuenciaDeRecordatorios {
 
     /**

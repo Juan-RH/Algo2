@@ -1,6 +1,5 @@
 package aed;
 
-import javafx.beans.binding.StringBinding;
 
 public class Agenda {
 
