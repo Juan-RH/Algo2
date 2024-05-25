@@ -116,8 +116,72 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     }
 
     public void eliminar(T elem){
-        throw new UnsupportedOperationException("No implementada aun");
-    }
+        Nodo actual = Raiz;
+        Nodo anterior = actual;
+
+        if(pertenece(elem) && CantidadNodos > 1){
+            // Avanzo hasta actual == elem
+            while (actual.value != elem) {
+                // Desplazo izquierda o derecha
+                if(actual.value.compareTo(elem) > 0){
+                    anterior = actual;
+                    actual = actual.L_Son;
+                }else if(actual.value.compareTo(elem) < 0){
+                    anterior = actual;
+                    actual = actual.R_Son;
+                }
+            }
+            //Tendremos dos casos, si actual tiene 2 hijos
+            if(actual.L_Son != null && actual.R_Son != null){// Cuando actual tiene los dos hijos
+                
+                    //filtremos primero el nodo que tengo que reemplazar en lugar del actual
+                    //nodoProximo es el min() del subárbol desde el nodo actual.
+                    Nodo nodoProximo = actual.R_Son;
+                    Nodo padreProximo = nodoProximo;
+                    while (nodoProximo.L_Son != null) {
+                        padreProximo = nodoProximo;
+                        nodoProximo = nodoProximo.L_Son;
+                    }
+                    actual.value = nodoProximo.value; // reemplazo el value del proximo en actual
+                    
+                    //y ahora podemos desvincular nodoProximo del arbol
+                    if(nodoProximo.R_Son != null){//Hay un caso más, donde si el nodo proximo tiene hijos izquierdos, tengo que enlazarlos como hijos derechos de padreProximo
+                        padreProximo.L_Son = nodoProximo.R_Son;
+                    }else{
+                        padreProximo.L_Son = null;
+                    }
+            }
+
+            //Y si actual tiene menos de 2 hijos
+            // Dependiendo cual hijo sea actual, para reemplazar correctamente los valores del nodo padre de actual
+            
+            if(anterior.L_Son == actual){
+                
+                if(actual.L_Son == null && actual.R_Son == null){
+                    anterior.L_Son = null;
+                }else if(actual.R_Son == null){
+                    anterior.L_Son = actual.L_Son;
+                }else if(actual.L_Son == null){
+                    anterior.L_Son = actual.R_Son;
+                }else{ 
+                }
+
+
+            }else{
+                if(actual.L_Son == null && actual.R_Son == null){
+                    anterior.R_Son = null;
+                }else if(actual.R_Son == null){
+                    anterior.R_Son = actual.L_Son;
+                }else if(actual.L_Son == null){
+                    anterior.R_Son = actual.R_Son;
+                }else{
+                }
+            }
+            CantidadNodos--;
+        }else{
+            ;
+        }
+}
 
     public String toString(){
         throw new UnsupportedOperationException("No implementada aun");
