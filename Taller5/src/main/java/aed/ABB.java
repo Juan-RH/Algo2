@@ -11,17 +11,14 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
 
     private class Nodo {
         // Agregar atributos privados del Nodo
-        private Nodo Father;
-        private Nodo L_Son;
-        private Nodo R_Son;
-        private T value;
+        Nodo Father;
+        Nodo L_Son;
+        Nodo R_Son;
+        T value;
         
 
         // Crear Construcftor del nodo
         public Nodo(T value) {
-            this.Father = null;
-            this.L_Son = null;
-            this.R_Son = null;
             this.value = value;
 
         }
@@ -37,22 +34,28 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
     }
 
     public T minimo(){
-        Nodo actual = Raiz;
 
-        while(actual.L_Son != null){
-            actual = actual.L_Son;
-        }return actual.value;
+        return minimoRecursivo(Raiz);
+    }
 
+    public T minimoRecursivo(Nodo n){
+        if(n.L_Son == null){
+            return n.value;
+        }else{
+            return minimoRecursivo(n.L_Son);
+        }
     }
 
     public T maximo(){
-        Nodo actual = Raiz;
-
-        while(actual.R_Son != null){
-            actual = actual.R_Son;
-        }return actual.value;
+        return maximoRecursivo(Raiz);
     }
-
+    public T maximoRecursivo(Nodo n){
+        if(n.R_Son == null){
+            return n.value;
+        }else{
+            return maximoRecursivo(n.R_Son);
+        }
+    }
     public void insertar(T elem){
         if(pertenece(elem)){
             ;
@@ -95,12 +98,25 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
             }
         }
     }
-
     public boolean pertenece(T elem){
         Nodo actual = Raiz;
         boolean esta = false;
+        return perteneceRecursivo(elem, Raiz);
+        }
 
-        while (actual != null) {
+    public boolean perteneceRecursivo(T elem, Nodo n){
+        if(n == null){
+            return false;
+        }
+        else if(n.value == elem){
+            return true;
+        }else if(n.value.compareTo(elem) > 0){
+            return perteneceRecursivo(elem, n.L_Son);
+        }else{
+            return perteneceRecursivo(elem, n.R_Son);
+        }
+    }
+        /*while (actual != null) {
             if(actual.value.compareTo(elem) == 0){
                 esta = true;
                 break;
@@ -113,7 +129,7 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
         }
         return esta;
 
-    }
+    } */ 
 
     public void eliminar(T elem){
         Nodo actual = Raiz;
@@ -181,26 +197,70 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
         }else{
             ;
         }
-}
+    }
 
     public String toString(){
-        throw new UnsupportedOperationException("No implementada aun");
+        Iterador<T> iterador = new ABB_Iterador();
+        StringBuffer cadena = new StringBuffer("{");
+        
+
+        
+        while(iterador.haySiguiente()){
+            cadena.append(iterador.siguiente() + ",");
+            
+        }
+        cadena.deleteCharAt(cadena.length()-1);
+        cadena.append("}");
+        return cadena.toString();
     }
+
+
+
+    public Nodo hallarNodoSiguiente(Nodo arbol) {
+        if (arbol == null) {return null;}
+        if (arbol.R_Son != null) {return hallarNodoConMinimo(arbol.R_Son);}
+        return hallarSiguienteNodoPadre(arbol);
+    }
+
+    public Nodo hallarSiguienteNodoPadre(Nodo arbol) {
+        Nodo nodoPadre = arbol.Father;
+        if (arbol == null || nodoPadre == null || arbol == nodoPadre.L_Son) {return nodoPadre;}
+        return hallarSiguienteNodoPadre(nodoPadre);
+    
+    }
+
+    public Nodo hallarNodoConMinimo(Nodo arbol){
+        if(arbol.L_Son == null) {return arbol; }
+        else {return hallarNodoConMinimo(arbol.L_Son);}
+    }
+
 
     private class ABB_Iterador implements Iterador<T> {
         private Nodo _actual;
+        private int nodosRecorridos = 0;
+        
+        public ABB_Iterador() {
+            this._actual= hallarNodoConMinimo(Raiz);
+        
+        }
 
         public boolean haySiguiente() {            
-            throw new UnsupportedOperationException("No implementada aun");
+            if(_actual != null){
+                return true;
+            }else{
+                return false;
+            }
         }
     
         public T siguiente() {
-            throw new UnsupportedOperationException("No implementada aun");
+            Nodo _anterior = _actual;
+            
+            _actual = hallarNodoSiguiente(_actual);
+            return _anterior.value;
         }
     }
 
     public Iterador<T> iterador() {
         return new ABB_Iterador();
     }
-
 }
