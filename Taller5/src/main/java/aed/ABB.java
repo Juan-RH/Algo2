@@ -56,66 +56,135 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
             return maximoRecursivo(n.R_Son);
         }
     }
-    public void insertar(T elem){
-        if(pertenece(elem)){
-            ;
-        }else{
-        
-            Nodo ingresante = new Nodo(elem);
-            Nodo actual = Raiz;
-            Nodo anterior= actual;
-            
-        
-            //si el Nodo Raiz es null, le asigno el ingresante. 
-            if(Raiz == null){
-                Raiz = ingresante;
-                CantidadNodos++;
-                return;
-            }else{
-            //Sino, se desplaza comparando actual con elem y desplazando al nodo hijo que corresponde
-                while(actual != null){
-                    if(actual.value.compareTo(elem) > 0){
-                        anterior = actual;
-                        actual = actual.L_Son;
-                    }else if(actual.value.compareTo(elem) < 0){
-                        anterior = actual;
-                        actual = actual.R_Son;
-                    }else{
-
-                    }
-                }
-            
-            // Asigno el nuevo nodo en la posición de actual correspondiente
-            ingresante.Father = anterior;
-            // Para asignar cual valor de hijo corresponde, comparo elem con con el padre
-            if(anterior.value.compareTo(elem) > 0){
-                anterior.L_Son = ingresante;
-            }else{
-                anterior.R_Son = ingresante;
+    public void insertar(T elem) {
+        Nodo nuevoNodo = new Nodo(elem);
+        if (pertenece(elem)) {
+            return;
+        }
+        // Si está vacío lo asigno como nueva raiz
+        if (Raiz == null) {
+            Raiz = nuevoNodo;
+            CantidadNodos += 1;
+            return;
+        }
+        insertarRecursivo(nuevoNodo, Raiz);
+    }
+    
+    public void insertarRecursivo(Nodo nuevoNodo, Nodo actual) {
+        // Si nodo nuevo > actual
+        if (nuevoNodo.value.compareTo(actual.value) > 0) {
+            // Si el valor del nuevo nodo es mayor, inserto a la derecha
+            if (actual.R_Son == null) {
+                actual.R_Son = nuevoNodo;  // Asigno el nuevo como hijo derecho
+                nuevoNodo.Father = actual; 
+                CantidadNodos += 1; 
+            } else {
+                // sigo buscando recursivamente a la derecha
+                insertarRecursivo(nuevoNodo, actual.R_Son);
             }
-            actual = ingresante;
-            CantidadNodos++;
+        } else {
+            // Si el valor del nuevo nodo es menor o igual, inserto a la izquierda
+            if (actual.L_Son == null) {
+                actual.L_Son = nuevoNodo;  // Asigno el nuevo como hijo izquierdo
+                nuevoNodo.Father = actual; 
+                CantidadNodos += 1; 
+            } else {
+                insertarRecursivo(nuevoNodo, actual.L_Son);
             }
         }
     }
-    public boolean pertenece(T elem){
-        Nodo actual = Raiz;
-        boolean esta = false;
-        return perteneceRecursivo(elem, Raiz);
+      
+
+    public void eliminar(T elem) {
+        Nodo actual = this.Raiz;
+        Nodo padre = null;
+    
+        // Caso base: si el nodo actual es nulo, termina la recursión
+        if (actual == null) {
+            return;
         }
+    
+        eliminarRecursivo(elem, padre, actual);
+    }
+    
+    private void eliminarRecursivo(T elem, Nodo padre, Nodo actual) {
+        // Caso base: si el nodo actual es nulo, termina la recursión
+        if (actual == null) {
+            return;
+        }
+    
+        // Desplazo hasta el nodo a eliminar
+        if (elem.compareTo(actual.value) > 0) {
+            eliminarRecursivo(elem, actual, actual.R_Son);
+        } else if (elem.compareTo(actual.value) < 0) {
+            eliminarRecursivo(elem, actual, actual.L_Son);
+        } else {
+            
+            Nodo hijo;
+            if (actual.L_Son != null) {
+                hijo = actual.L_Son;
+            } else {
+                hijo = actual.R_Son;
+            }
+    
+            if (actual.R_Son == null || actual.L_Son == null) {
+                // Si no tiene padre, hablamos de la raiz
+                if (padre == null) {
+                    this.Raiz = hijo;
+                } else if (padre.L_Son == actual) {
+                    padre.L_Son = hijo;
+                } else {
+                    padre.R_Son = hijo;
+                }
+                this.CantidadNodos--;
+            } else {
+                // Busca el predecesor inmediato (el mayor de los hijos izquierdos)
+                Nodo nodoProximo = actual;
+                Nodo Pre_inmediato = nodoProximo.L_Son;
+    
+                while (Pre_inmediato.R_Son != null) {
+                    nodoProximo = Pre_inmediato;
+                    Pre_inmediato = Pre_inmediato.R_Son;
+                }
+    
+               
+                actual.value = Pre_inmediato.value;
+                
+                
+                if (nodoProximo != actual) {
+                    nodoProximo.R_Son = Pre_inmediato.L_Son; 
+                } else {
+                    nodoProximo.L_Son = Pre_inmediato.L_Son;
+                }
+    
+                this.CantidadNodos--;
+            }
+        }
+    }
+    
+
+    public boolean pertenece(T elem){
+        Nodo nodo = this.Raiz;
+        
+        return perteneceRecursivo(elem, nodo); 
+         
+    }
 
     public boolean perteneceRecursivo(T elem, Nodo n){
-        if(n == null){
+        if(n == null) {
             return false;
+        } 
+        if(elem.compareTo(n.value)==0) {
+            return true; 
         }
-        else if(n.value == elem){
-            return true;
-        }else if(n.value.compareTo(elem) > 0){
+        else if(elem.compareTo(n.value)<0) {
             return perteneceRecursivo(elem, n.L_Son);
-        }else{
+        }
+        else {
             return perteneceRecursivo(elem, n.R_Son);
         }
     }
+
         /*while (actual != null) {
             if(actual.value.compareTo(elem) == 0){
                 esta = true;
@@ -130,74 +199,6 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
         return esta;
 
     } */ 
-
-    public void eliminar(T elem){
-        Nodo actual = Raiz;
-        Nodo anterior = actual;
-
-        if(pertenece(elem) && CantidadNodos > 1){
-            // Avanzo hasta actual == elem
-            while (actual.value != elem) {
-                // Desplazo izquierda o derecha
-                if(actual.value.compareTo(elem) > 0){
-                    anterior = actual;
-                    actual = actual.L_Son;
-                }else if(actual.value.compareTo(elem) < 0){
-                    anterior = actual;
-                    actual = actual.R_Son;
-                }
-            }
-            //Tendremos dos casos, si actual tiene 2 hijos
-            if(actual.L_Son != null && actual.R_Son != null){// Cuando actual tiene los dos hijos
-                
-                    //filtremos primero el nodo que tengo que reemplazar en lugar del actual
-                    //nodoProximo es el min() del subárbol desde el nodo actual.
-                    Nodo nodoProximo = actual.R_Son;
-                    Nodo padreProximo = nodoProximo;
-                    while (nodoProximo.L_Son != null) {
-                        padreProximo = nodoProximo;
-                        nodoProximo = nodoProximo.L_Son;
-                    }
-                    actual.value = nodoProximo.value; // reemplazo el value del proximo en actual
-                    
-                    //y ahora podemos desvincular nodoProximo del arbol
-                    if(nodoProximo.R_Son != null){//Hay un caso más, donde si el nodo proximo tiene hijos izquierdos, tengo que enlazarlos como hijos derechos de padreProximo
-                        padreProximo.L_Son = nodoProximo.R_Son;
-                    }else{
-                        padreProximo.L_Son = null;
-                    }
-            }
-
-            //Y si actual tiene menos de 2 hijos
-            // Dependiendo cual hijo sea actual, para reemplazar correctamente los valores del nodo padre de actual
-            
-            if(anterior.L_Son == actual){
-                
-                if(actual.L_Son == null && actual.R_Son == null){
-                    anterior.L_Son = null;
-                }else if(actual.R_Son == null){
-                    anterior.L_Son = actual.L_Son;
-                }else if(actual.L_Son == null){
-                    anterior.L_Son = actual.R_Son;
-                }else{ 
-                }
-
-
-            }else{
-                if(actual.L_Son == null && actual.R_Son == null){
-                    anterior.R_Son = null;
-                }else if(actual.R_Son == null){
-                    anterior.R_Son = actual.L_Son;
-                }else if(actual.L_Son == null){
-                    anterior.R_Son = actual.R_Son;
-                }else{
-                }
-            }
-            CantidadNodos--;
-        }else{
-            ;
-        }
-    }
 
     public String toString(){
         Iterador<T> iterador = new ABB_Iterador();
@@ -216,22 +217,26 @@ public class ABB<T extends Comparable<T>> implements Conjunto<T> {
 
 
 
-    public Nodo hallarNodoSiguiente(Nodo arbol) {
-        if (arbol == null) {return null;}
-        if (arbol.R_Son != null) {return hallarNodoConMinimo(arbol.R_Son);}
-        return hallarSiguienteNodoPadre(arbol);
+    public Nodo hallarNodoSiguiente(Nodo n) {
+        if (n == null) {return null;}
+        if (n.R_Son != null) {return hallarNodoConMinimo(n.R_Son);}
+        return hallarSiguienteNodoPadre(n);
     }
 
-    public Nodo hallarSiguienteNodoPadre(Nodo arbol) {
-        Nodo nodoPadre = arbol.Father;
-        if (arbol == null || nodoPadre == null || arbol == nodoPadre.L_Son) {return nodoPadre;}
+    public Nodo hallarSiguienteNodoPadre(Nodo n) {
+        Nodo nodoPadre = n.Father;
+        if (n == null || nodoPadre == null || n == nodoPadre.L_Son) {return nodoPadre;}
         return hallarSiguienteNodoPadre(nodoPadre);
     
     }
 
-    public Nodo hallarNodoConMinimo(Nodo arbol){
-        if(arbol.L_Son == null) {return arbol; }
-        else {return hallarNodoConMinimo(arbol.L_Son);}
+    public Nodo hallarNodoConMinimo(Nodo n){
+        if(n.L_Son == null) {
+            return n; 
+        }
+        else {
+            return hallarNodoConMinimo(n.L_Son);
+        }
     }
 
 
